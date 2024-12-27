@@ -18,8 +18,9 @@ from queue_manager import queue_manager  #importa a instância compartilhada
 from IAWRtypes.SpawnPart import SpawnPartEntry
 from IAWRtypes.OutputEditor import OutputEditorEntry
 from IAWRtypes.ManagePlayer import ManagePlayerEntry
+from IAWRtypes.SpawnAsset import SpawnAssetEntry
 
-#test values
+#test valuess
 queue_manager.add_to_queue(
     OutputEditorEntry("12345").withType("addLine").withValue("Hello World!")
 )
@@ -29,10 +30,6 @@ queue_manager.add_to_queue(
         .withColor("Red")
         .withSize("1x1x1")
         .withName("Part Vermelhao")
-)
-queue_manager.add_to_queue(
-    ManagePlayerEntry("09876")
-        .killPlayer(123456789)
 )
 
 ############################################################################

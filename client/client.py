@@ -10,6 +10,7 @@ from IAWRtypes._QueueManager import QueueManager
 from IAWRtypes.OutputEditor import OutputEditorEntry
 from IAWRtypes.ManagePlayer import ManagePlayerEntry
 from IAWRtypes.SpawnPart import SpawnPartEntry
+from IAWRtypes.SpawnAsset import SpawnAssetEntry
 
 from queue_manager import queue_manager  #importa a instância compartilhada
 
@@ -52,3 +53,27 @@ async def spawnPart(interaction: discord.Interaction, position: str, size: str, 
     )
     
     await interaction.response.send_message("'SpawnPart' action has queued! position: {queue_manager.count()}")
+
+
+@IAWRBot.tree.command(name="spawn_asset")
+@app_commands.describe(asset_id="ID do asset para carregar o modelo",
+                       position="Posição para spawnar o modelo (ex: 0x0x0)",
+                       name="Nome opcional para o modelo")
+async def spawnAsset(interaction: discord.Interaction, asset_id: int, position: str = "0x0x0", name: str = None):
+    """
+    Comando para adicionar uma ação de spawn de asset na fila.
+    """
+    #validação do ID do asset
+    if asset_id <= 0:
+        await interaction.response.send_message("O ID do asset deve ser maior que 0.", ephemeral=True)
+        return
+
+    #cria uma entrada de fila para spawnar o asset
+    queue_manager.add_to_queue(
+        SpawnAssetEntry(str(interaction.channel_id))
+        .withAssetId(asset_id)
+        .withPosition(position)
+        .withName(name or f"Asset_{asset_id}")
+    )
+
+    await interaction.response.send_message(f"'SpawnAsset' action foi adicionada à fila! ID do asset: {asset_id}, Posição: {position}")
