@@ -5,11 +5,11 @@ class QueueManager:
         self.queue = {}
         self.next_id = 0
     
-    def count(self) -> int:
+    def count(self, channel_id: str) -> int:
         """
-        Retorna o numero de entradas da fila
+        Retorna o numero de entradas da fila.
         """
-        return len(self.queue)
+        return sum(1 for value in self.queue.values() if value["fromChannel"] == channel_id)
 
     def add_to_queue(self, entry: QueueEntry) -> None:
         """
